@@ -13,7 +13,7 @@ function setup() {
 
   scaleInterval = setInterval(function () {
     scaleUp = !scaleUp;
-  }, 2000);
+  }, 3000);
 }
 
 function makeCircles() {
@@ -59,6 +59,7 @@ function draw() {
   for (let circle of circles) {
     if (circle instanceof BigCircle) {
       circle.update();
+      circle.updateScale(scaleUp);
     }
     circle.show();
   }
@@ -92,7 +93,7 @@ class BigCircle {
   }
 
   update() {
-    this.rotate += 2; // Adjust the rotation speed for the BigCircle
+    this.rotate += 1; // Adjust the rotation speed for the BigCircle
   }
 
   show() {
@@ -118,18 +119,25 @@ class BigCircle {
     pop();
   }
 
-  update(scaleUp) {
+  updateScale(scaleUp) {
     if (scaleUp) {
-      this.radius += 2; // Scale up
+      this.radius += 0.5; // Scale up
       if (this.radius >= bigCircleRadius * 1.2) {
+        console.log("SWAP TO NEGATIVE");
+        console.log(bigCircleRadius);
         scaleUp = false;
       }
     } else {
-      this.radius -= 5; // Scale down
-      if (this.radius <= bigCircleRadius) {
+      this.radius -= 1; // Scale down
+      if (this.radius <= bigCircleRadius / 1.5) {
+        console.log(this.radius)
+        console.log("SWAP TO POSITIVE");
+        console.log(bigCircleRadius);
         scaleUp = true;
+
       }
     }
+    console.log(scaleUp);
   }
 }
 
@@ -143,7 +151,7 @@ class SmallCircle {
   }
 
   rotate() { // Corrected the method name
-    this.rotation += 5; // Adjust the rotation speed for the SmallCircle
+    this.rotation += 1; // Adjust the rotation speed for the SmallCircle
   }
 
   show() {
