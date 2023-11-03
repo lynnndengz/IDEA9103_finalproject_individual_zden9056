@@ -3,11 +3,17 @@ const maxRadius = 40;
 const bigCircleRadius = 80;
 let frameCount = 0;
 let smallCirclesAnimated = false; // Flag to track if small circles animation has started
+let scaleUp = true; // Flag to track whether to scale up or down
+let scaleInterval;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   colorMode(HSB);
   makeCircles();
+
+  scaleInterval = setInterval(function () {
+    scaleUp = !scaleUp;
+  }, 2000);
 }
 
 function makeCircles() {
@@ -22,7 +28,7 @@ function makeCircles() {
       let hue = random(360);
       circles.push(new BigCircle(x, y, bigCircleRadius, color(hue, 5, 90)));
 
-      for (let j = 0; j < 6; j++) {
+      for (let j = 0; j < 3; j++) {
         let hueSmall = random(360);
         let shade = color(hueSmall, 80, 70, 0.7);
         let radius = maxRadius * (1.0) * (1 - j * 0.2) * 0.9;
@@ -111,7 +117,22 @@ class BigCircle {
     }
     pop();
   }
+
+  update(scaleUp) {
+    if (scaleUp) {
+      this.radius += 2; // Scale up
+      if (this.radius >= bigCircleRadius * 1.2) {
+        scaleUp = false;
+      }
+    } else {
+      this.radius -= 5; // Scale down
+      if (this.radius <= bigCircleRadius) {
+        scaleUp = true;
+      }
+    }
+  }
 }
+
 
 class SmallCircle {
   constructor(x, y, radius, base) {
@@ -122,7 +143,7 @@ class SmallCircle {
   }
 
   rotate() { // Corrected the method name
-    this.rotation += 50; // Adjust the rotation speed for the SmallCircle
+    this.rotation += 5; // Adjust the rotation speed for the SmallCircle
   }
 
   show() {
